@@ -1,0 +1,22 @@
+{
+  "name": "travishintonpoetry",
+  "version": "1.0.0",
+  "description": "Publishing pipeline and Astro site for Travis Hinton poetry.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync": "node scripts/sync-poems.mjs",
+    "sync:publish": "node scripts/sync-and-publish.mjs",
+    "cron:install": "node scripts/install-cron.mjs"
+  },
+  "keywords": [],
+  "author": "Travis Hinton",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "astro": "^5.14.6",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.poetry-source/
+.netlify/
+.sync.log
+.sync.lock
+.DS_Store
