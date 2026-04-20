@@ -52,6 +52,14 @@ async function ensureCleanDir(dir) {
   await fs.mkdir(dir, { recursive: true });
 }
 
+function resolveCreatedAt(stats) {
+  if (Number.isFinite(stats.birthtimeMs) && stats.birthtimeMs > 0) {
+    return stats.birthtime;
+  }
+
+  return stats.mtime;
+}
+
 async function main() {
   const files = await fg('**/*.md', {
     cwd: vaultRoot,
@@ -78,6 +86,7 @@ async function main() {
     if (!include) continue;
 
     const stats = await fs.stat(file);
+    const createdAt = resolveCreatedAt(stats);
     const relativeSourcePath = path.relative(vaultRoot, file);
     const title = titleFromFile(file, parsed.data);
     const baseSlug = slugify(title) || slugify(relativeSourcePath) || `poem-${makeHash(relativeSourcePath)}`;
@@ -99,11 +108,11 @@ async function main() {
       relativeSourcePath,
       symlinkPath: path.relative(projectRoot, linkPath),
       sourceModified: stats.mtime.toISOString(),
-      sourceCreated: stats.birthtime.toISOString(),
+      sourceCreated: createdAt.toISOString(),
     });
   }
 
-  entries.sort((a, b) => new Date(b.sourceModified) - new Date(a.sourceModified));
+  entries.sort((a, b) => new Date(b.sourceCreated) - new Date(a.sourceCreated));
 
   await fs.mkdir(path.dirname(outputFile), { recursive: true });
   await fs.writeFile(outputFile, `${JSON.stringify(entries, null, 2)}\n`);

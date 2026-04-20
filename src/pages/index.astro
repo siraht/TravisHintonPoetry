@@ -27,7 +27,7 @@ import SiteFooter from '../components/SiteFooter.astro';
                 {poem.title}
               </a>
               <span class="poem-item-meta">
-                NO. {String(index + 1).padStart(3, '0')} // {formatDate(poem.sourceModified)}
+                NO. {String(index + 1).padStart(3, '0')} // {formatDate(poem.sourceCreated)}
               </span>
             </li>
           ))}
