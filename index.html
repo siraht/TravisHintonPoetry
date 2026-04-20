@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travis Hinton | Poetry</title>
+    <style>
+        /* 
+         * AESTHETIC DIRECTION: Digital Zen / Brutalist Elegance.
+         * High contrast pure black and white.
+         * Typography creates tension between classic spiritual (Garamond) and cold digital (Space Mono).
+         * Motion is slow, deliberate, and mathematically precise to reflect the cosmic theme.
+         */
+
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:ital,wght@0,400;1,400&display=swap');
+
+        :root {
+            --bg: #000000;
+            --fg: #ffffff;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Cormorant Garamond', serif;
+            --font-mono: 'Space Mono', monospace;
+            --transition-slow: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* Noise Texture for tactile organic feel mixed with digital medium */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Pixelated Cosmic Canvas */
+        #cosmic-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.6;
+            pointer-events: none;
+            /* Intentional rendering crispness for pixel art feel */
+            image-rendering: pixelated; 
+        }
+
+        /* Layout Grid */
+        .page-wrapper {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            padding: 4vw;
+            min-height: 100vh;
+            gap: 4vw;
+        }
+
+        @media (max-width: 768px) {
+            .page-wrapper {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 4vw;
+            height: fit-content;
+        }
+
+        header h1 a {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: var(--fg);
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 0.9;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        header h1 a span {
+            display: block;
+            transition: transform var(--transition-fast), opacity var(--transition-fast);
+        }
+
+        header h1 a:hover span:nth-child(1) { transform: translateX(5px); }
+        header h1 a:hover span:nth-child(2) { transform: translateX(10px); }
+        header h1 a:hover span:nth-child(3) { transform: translateX(15px); }
+
+        /* Main Content - Poem Index */
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 10vh;
+            padding-bottom: 20vh;
+        }
+
+        .poem-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4vh;
+        }
+
+        .poem-item {
+            position: relative;
+        }
+
+        .poem-link {
+            background: none;
+            border: none;
+            color: var(--fg);
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-style: italic;
+            cursor: pointer;
+            text-align: left;
+            padding: 0;
+            transition: opacity var(--transition-fast);
+            opacity: 0.7;
+            position: relative;
+        }
+
+        /* Techy hover effect on elegant text */
+        .poem-link::before {
+            content: '>';
+            position: absolute;
+            left: -30px;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-style: normal;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity var(--transition-fast), left var(--transition-fast);
+        }
+
+        .poem-link:hover {
+            opacity: 1;
+        }
+
+        .poem-link:hover::before {
+            opacity: 1;
+            left: -20px;
+        }
+
+        .poem-item-meta {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.4;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 4vw;
+            left: 4vw;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        footer, footer a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--fg);
+            text-decoration: none;
+            line-height: 1.2;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
+
+        footer a:hover {
+            opacity: 1;
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 4px;
+        }
+
+        /* Poem Expansion Modal */
+        .poem-modal {
+            position: fixed;
+            inset: 0;
+            background-color: var(--bg);
+            z-index: 100;
+            display: flex;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-slow);
+            overflow-y: auto;
+        }
+
+        .poem-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Tech grid background for the modal to differentiate from home */
+        .poem-modal::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .modal-content {
+            margin: auto;
+            width: 100%;
+            max-width: 800px;
+            padding: 15vh 5vw;
+            transform: translateY(20px);
+            transition: transform var(--transition-slow);
+        }
+
+        .poem-modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .btn-close {
+            position: fixed;
+            top: 4vw;
+            right: 4vw;
+            background: none;
+            border: none;
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 101;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.6;
+            transition: opacity var(--transition-fast);
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        .btn-close::before {
+            content: '[x]';
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .modal-meta {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0.5;
+            margin-bottom: 5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .modal-body {
+            font-family: var(--font-body);
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            line-height: 1.8;
+            white-space: pre-wrap;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .modal-body p {
+            margin-bottom: 2rem;
+        }
+
+        /* Custom Scrollbar for brutalist feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border: 1px solid var(--bg);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+    <canvas id="cosmic-canvas"></canvas>
+
+    <div class="page-wrapper">
+        <header>
+            <h1>
+                <a href="#" id="home-link">
+                    <span>Travis</span>
+                    <span>Hinton</span>
+                    <span>Poetry</span>
+                </a>
+            </h1>
+        </header>
+
+        <main>
+            <ul class="poem-list" id="poem-list">
+                <!-- Poems injected by JS -->
+            </ul>
+        </main>
+    </div>
+
+    <footer>
+        <span>© 2024 Travis Hinton</span>
+        <a href="#">Contact</a>
+        <a href="#">Instagram</a>
+        <a href="#">Index</a>
+    </footer>
+
+    <div class="poem-modal" id="poem-modal">
+        <button class="btn-close" id="btn-close">Return</button>
+        <div class="modal-content">
+            <h2 class="modal-title" id="modal-title"></h2>
+            <div class="modal-meta" id="modal-meta"></div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * POETRY DATA
+         */
+        const poems = [
+            {
+                id: 'binary-soul',
+                title: 'Binary Soul',
+                date: 'SYS.DATE.01',
+                content: `I search for ghost in the machine,\nA whisper caught between the screens.\n0 and 1, the heartbeat code,\nAlong this endless, silent road.
+
+We digitize the holy ghost,\nAnd upload what we love the most.\nBut in the gaps of pixel light,\nWe still fear the ancient night.
+
+A soul compressed, a file saved,\nIn server racks, a modern nave.\nPray to the glow, the endless scroll,\nTo mend the fragmented, binary soul.`
+            },
+            {
+                id: 'algorithmic-grace',
+                title: 'Algorithmic Grace',
+                date: 'SYS.DATE.02',
+                content: `The math decides who we will meet,\nCalculated love upon the street.\nCoordinates align by chance?\nOr programmed, predetermined dance.
+
+I touch your hand, a haptic thrill,\nAgainst the overarching will\nOf data streams that plot our days,\nWithin this softly glowing maze.
+
+Yet when you look away, I find\nA glitch the system left behind.\nA sudden breath, an unmapped space,\nA sudden, algorithmic grace.`
+            },
+            {
+                id: 'pixel-dust',
+                title: 'Constellations of Pixel Dust',
+                date: 'SYS.DATE.03',
+                content: `Look up into the static sky,\nWhere dead white pixels slowly die.\nThey form a shape we used to know,\nBefore the artificial snow.
+
+Orion rendered in low-res,\nA silent, digital confess.\nWe traded stars for glowing glass,\nAnd watched the universe just pass.
+
+But sometimes, when the screen goes dark,\nI see a faint, primordial spark.\nReflected in the monitor's crust,\nWe are but starlight. We are dust.`
+            },
+            {
+                id: 'void-state',
+                title: 'Void State (Null)',
+                date: 'SYS.DATE.04',
+                content: `Nothing is an object too.\nA vessel waiting to hold you.\nAn empty string, a cleared array,\nWhere heavy thoughts can slip away.
+
+Embrace the black, the screen asleep,\nWhere silent, hidden processes creep.\nTo find the peace we rarely see,\nRequire: function(let_it_be).`
+            }
+        ];
+
+        /**
+         * DOM ELEMENTS & INTERACTION LOGIC
+         */
+        const poemList = document.getElementById('poem-list');
+        const modal = document.getElementById('poem-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMeta = document.getElementById('modal-meta');
+        const modalBody = document.getElementById('modal-body');
+        const btnClose = document.getElementById('btn-close');
+        const homeLink = document.getElementById('home-link');
+
+        // Populate List
+        poems.forEach((poem, index) => {
+            const li = document.createElement('li');
+            li.className = 'poem-item';
+            // Stagger animation delay slightly for an elegant load if we added a load animation
+            li.innerHTML = `
+                <button class="poem-link" data-id="${poem.id}">
+                    ${poem.title}
+                </button>
+                <span class="poem-item-meta">NO. 00${index + 1} // ${poem.date}</span>
+            `;
+            poemList.appendChild(li);
+        });
+
+        // Open Modal Event
+        poemList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.poem-link');
+            if (!btn) return;
+
+            const poemId = btn.getAttribute('data-id');
+            const poem = poems.find(p => p.id === poemId);
+
+            if (poem) {
+                // Populate Modal
+                modalTitle.textContent = poem.title;
+                modalMeta.textContent = `DATA_REF: ${poem.date} // STATUS: RENDERED`;
+                
+                // Format content (wrap stanzas in <p>)
+                const formattedContent = poem.content.split('\n\n').map(stanza => `<p>${stanza.replace(/\n/g, '<br>')}</p>`).join('');
+                modalBody.innerHTML = formattedContent;
+
+                // Show Modal
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
+            }
+        });
+
+        // Close Modal Event
+        const closeModal = () => {
+            modal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+            // Wait for transition before clearing content
+            setTimeout(() => {
+                if(!modal.classList.contains('active')) {
+                    modalTitle.textContent = '';
+                    modalMeta.textContent = '';
+                    modalBody.innerHTML = '';
+                }
+            }, 1200); // Matches var(--transition-slow)
+        };
+
+        btnClose.addEventListener('click', closeModal);
+        
+        // Home link also closes modal if open
+        homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        /**
+         * CANVAS ANIMATION: PIXELATED SPIRITUAL GALAXY
+         */
+        const canvas = document.getElementById('cosmic-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false }); // Optimize for black background
+        
+        let width, height;
+        let particles = [];
+
+        // Configuration for the aesthetic
+        const config = {
+            particleCount: 1500,
+            pixelSize: 2, // Size of the 'pixels'
+            rotationSpeed: 0.0002,
+            expansion: 1.5, // How wide the arms stretch
+            arms: 3, // Number of spiral arms
+            armWidth: 0.4, // Dispersion around the arm
+        };
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        class Particle {
+            constructor() {
+                // Determine position based on a logarithmic spiral formula to create a galaxy shape
+                const r = Math.random();
+                const distance = Math.pow(r, config.expansion) * (Math.max(width, height) * 0.8);
+                
+                // Assign to one of the arms
+                const armAngle = (Math.floor(Math.random() * config.arms) / config.arms) * Math.PI * 2;
+                
+                // Add some curvature to the arm based on distance
+                const twist = distance * 0.002;
+                
+                // Add random dispersion so it's not a perfect line
+                const dispersion = (Math.random() - 0.5) * config.armWidth * distance;
+
+                this.baseAngle = armAngle + twist;
+                this.distance = distance + dispersion;
+                
+                // Size varies slightly for depth, but snapped to integers for pixel look
+                this.size = Math.floor(Math.random() * 2) === 0 ? config.pixelSize : config.pixelSize * 2;
+                
+                // Opacity is higher in center, lower at edges
+                this.baseAlpha = (1 - (this.distance / (Math.max(width, height) * 0.6))) * 0.8;
+                if (this.baseAlpha < 0) this.baseAlpha = 0.1;
+                
+                // Blinking effect
+                this.blinkRate = Math.random() * 0.02;
+                this.blinkPhase = Math.random() * Math.PI * 2;
+            }
+
+            draw(time) {
+                // Calculate current angle based on time (rotation)
+                // Outer particles rotate slightly slower
+                const speedMod = 1 / (1 + (this.distance * 0.001));
+                const currentAngle = this.baseAngle + (time * config.rotationSpeed * speedMod);
+
+                // Convert Polar to Cartesian
+                const x = width / 2 + Math.cos(currentAngle) * this.distance;
+                const y = height / 2 + Math.sin(currentAngle) * this.distance;
+
+                // Only draw if on screen
+                if (x > 0 && x < width && y > 0 && y < height) {
+                    // Calculate alpha with a sine wave for subtle digital flickering
+                    const currentAlpha = this.baseAlpha * (0.7 + 0.3 * Math.sin(time * this.blinkRate + this.blinkPhase));
+                    
+                    // Force pixel grid snapping
+                    const pixelX = Math.floor(x / this.size) * this.size;
+                    const pixelY = Math.floor(y / this.size) * this.size;
+
+                    ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha})`;
+                    ctx.fillRect(pixelX, pixelY, this.size, this.size);
+                }
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < config.particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate(time) {
+            // Fill black background completely to erase previous frame
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, width, height);
+
+            particles.forEach(p => p.draw(time));
+            
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        
+        // Initialize
+        resize();
+        requestAnimationFrame(animate);
+
+    </script>
+</body>
+</html>
