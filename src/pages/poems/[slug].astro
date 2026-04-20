@@ -36,7 +36,6 @@ const poemHtml = renderPoemHtml(poem.body);
       <p class="eyebrow">Poem</p>
       <h1>{poem.title}</h1>
       <p>{formatDate(poem.sourceCreated)}</p>
-      <p class="source-note">{poem.relativeSourcePath}</p>
     </section>
 
     <article class="poem-body" set:html={poemHtml}></article>
