@@ -280,6 +280,7 @@ a:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  width: 92vw;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text);
