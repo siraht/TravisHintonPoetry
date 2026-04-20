@@ -1,8 +1,18 @@
 ---
-const { className = '' } = Astro.props;
+const { className = '', previous = null, next = null } = Astro.props;
 const footerClassName = ['site-footer', className].filter(Boolean).join(' ');
 ---
 
 <footer class={footerClassName}>
+  {(previous || next) && (
+    <nav class="footer-poem-nav" aria-label="More poems">
+      <div>
+        {previous ? <a href={`/poems/${previous.slug}/`}>Older: {previous.title}</a> : <span></span>}
+      </div>
+      <div>
+        {next ? <a href={`/poems/${next.slug}/`}>Newer: {next.title}</a> : <span></span>}
+      </div>
+    </nav>
+  )}
   <span>&copy; 2026 Travis Hinton</span>
 </footer>

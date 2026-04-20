@@ -252,7 +252,7 @@ a:focus-visible {
 }
 
 .site-nav a,
-.poem-pagination a,
+.footer-poem-nav a,
 .not-found a,
 .site-footer a {
   padding-bottom: 0.2rem;
@@ -263,8 +263,8 @@ a:focus-visible {
 
 .site-nav a:hover,
 .site-nav a:focus-visible,
-.poem-pagination a:hover,
-.poem-pagination a:focus-visible,
+.footer-poem-nav a:hover,
+.footer-poem-nav a:focus-visible,
 .not-found a:hover,
 .not-found a:focus-visible,
 .site-footer a:hover,
@@ -286,6 +286,20 @@ a:focus-visible {
   line-height: 1.2;
   opacity: 0.6;
   text-transform: uppercase;
+}
+
+.footer-poem-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.footer-poem-nav div:last-child {
+  text-align: right;
 }
 
 .poem-page,
@@ -357,22 +371,6 @@ a:focus-visible {
   max-width: 34rem;
 }
 
-.poem-pagination {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  padding: 1.5rem 2rem;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.poem-pagination div:last-child {
-  text-align: right;
-}
-
 .not-found {
   max-width: 44rem;
   margin-top: 5rem;
@@ -420,11 +418,15 @@ a:focus-visible {
     padding: 0 0 1.5rem 4vw;
   }
 
-  .poem-pagination {
+  .footer-poem-nav {
     grid-template-columns: 1fr;
   }
 
-  .poem-pagination div:last-child {
+  .footer-poem-nav {
+    order: -1;
+  }
+
+  .footer-poem-nav div:last-child {
     text-align: left;
   }
 }
