@@ -293,16 +293,6 @@ a:focus-visible {
   padding: 3rem 0 8rem;
 }
 
-.poem-meta,
-.poem-body,
-.poem-pagination,
-.empty-state {
-  backdrop-filter: blur(14px);
-  background: linear-gradient(180deg, var(--surface), rgba(255, 255, 255, 0.03));
-  border: 1px solid var(--line);
-  box-shadow: 0 20px 60px var(--shadow);
-}
-
 .empty-state {
   padding: 2.5rem;
 }
