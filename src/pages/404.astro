@@ -1,12 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import poems from '../data/poems.generated.json';
+import SiteFooter from '../components/SiteFooter.astro';
 ---
 
 <BaseLayout title="Page not found | Travis Hinton Poetry">
+  <div class="ambient-noise" aria-hidden="true"></div>
   <main id="main" class="not-found">
     <p class="eyebrow">404</p>
     <h1>This page is missing from the archive.</h1>
     <p>The link may be stale, or the poem may no longer be marked for publication.</p>
     <a href="/">Return to the archive</a>
   </main>
+
+  <SiteFooter poems={poems} />
 </BaseLayout>

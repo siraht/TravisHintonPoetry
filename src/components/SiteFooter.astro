@@ -1,0 +1,13 @@
+---
+import { formatDate } from '../lib/poetry.js';
+
+const { poems = [], className = '' } = Astro.props;
+const latestPoem = poems[0] ?? null;
+const footerClassName = ['site-footer', className].filter(Boolean).join(' ');
+---
+
+<footer class={footerClassName}>
+  <span>&copy; 2026 Travis Hinton</span>
+  <a href="/">Index</a>
+  {latestPoem && <a href={`/poems/${latestPoem.slug}/`}>Latest // {formatDate(latestPoem.sourceModified)}</a>}
+</footer>

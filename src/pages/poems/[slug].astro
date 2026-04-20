@@ -2,6 +2,8 @@
 import poems from '../../data/poems.generated.json';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { formatDate, renderPoemHtml } from '../../lib/poetry.js';
+import SiteBrand from '../../components/SiteBrand.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
 
 export function getStaticPaths() {
   return poems.map((poem, index) => ({
@@ -22,11 +24,7 @@ const poemHtml = renderPoemHtml(poem.body);
   <div class="ambient-noise" aria-hidden="true"></div>
 
   <header class="site-header poem-header">
-    <a class="brand" href="/">
-      <span>Travis</span>
-      <span>Hinton</span>
-      <span>Poetry</span>
-    </a>
+    <SiteBrand />
 
     <nav class="site-nav" aria-label="Poem navigation">
       <a href="/">Archive</a>
@@ -52,4 +50,6 @@ const poemHtml = renderPoemHtml(poem.body);
       </div>
     </nav>
   </main>
+
+  <SiteFooter poems={poems} />
 </BaseLayout>

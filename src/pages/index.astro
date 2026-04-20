@@ -2,85 +2,44 @@
 import poems from '../data/poems.generated.json';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { formatDate } from '../lib/poetry.js';
+import SiteBrand from '../components/SiteBrand.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 
 const poemCount = poems.length;
-const latestPoem = poems[0];
 ---
 
 <BaseLayout>
   <div class="ambient-noise" aria-hidden="true"></div>
-  <div class="constellation" aria-hidden="true"></div>
-
-  <header class="site-header">
-    <a class="brand" href="/">
-      <span>Travis</span>
-      <span>Hinton</span>
-      <span>Poetry</span>
-    </a>
-
-    <nav class="site-nav" aria-label="Primary">
-      <a href="#archive">Archive</a>
-      {latestPoem && <a href={`/poems/${latestPoem.slug}/`}>Latest poem</a>}
-    </nav>
-  </header>
-
-  <main id="main" class="home-grid">
-    <section class="hero-panel">
-      <p class="eyebrow">Collected from the vault</p>
-      <h1>A quiet, deliberate archive of poems pulled from an Obsidian practice.</h1>
-      <p class="hero-copy">
-        This site publishes only notes explicitly marked for the poetry collection. The writing
-        stays in the vault. The published archive is generated from that source of truth.
+  <div class="page-wrapper home-page">
+    <header class="home-sidebar">
+      <SiteBrand />
+      <p class="home-sidebar-note">
+        {poemCount} published poems, synced from explicitly tagged Obsidian notes.
       </p>
+    </header>
 
-      <div class="hero-metrics" aria-label="Archive metrics">
-        <div>
-          <span class="metric-value">{poemCount}</span>
-          <span class="metric-label">published poems</span>
-        </div>
-        <div>
-          <span class="metric-value">{latestPoem ? formatDate(latestPoem.sourceModified) : '—'}</span>
-          <span class="metric-label">latest update</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="manifest-panel">
-      <p class="manifest-kicker">Publishing rule</p>
-      <p class="manifest-text">
-        A poem appears here only when its Obsidian frontmatter includes both
-        <code>[[My Poetry]]</code> and <code>PoetrySite</code>.
-      </p>
-      <p class="manifest-note">
-        The source vault is never modified by this project. Local sync creates symlinks for traceability,
-        then generates deployable site data for Netlify.
-      </p>
-    </section>
-
-    <section class="archive-panel" id="archive">
-      <div class="section-heading">
-        <p class="eyebrow">Archive</p>
-        <h2>Published poems</h2>
-      </div>
-
+    <main id="main" class="home-main">
       {poemCount === 0 ? (
-        <div class="empty-state">
+        <div class="empty-state home-empty-state">
           <p>No poems are published yet.</p>
-          <p>Add the required frontmatter in Obsidian, then run the sync script.</p>
+          <p>Add both <code>[[My Poetry]]</code> and <code>PoetrySite</code> to a note’s frontmatter, then run the sync.</p>
         </div>
       ) : (
-        <ol class="poem-list">
+        <ol class="poem-index-list" aria-label="Published poems">
           {poems.map((poem, index) => (
-            <li class="poem-row">
+            <li class="poem-item">
               <a class="poem-link" href={`/poems/${poem.slug}/`}>
-                <span class="poem-index">{String(index + 1).padStart(2, '0')}</span>
-                <span class="poem-title">{poem.title}</span>
-                <span class="poem-date">{formatDate(poem.sourceModified)}</span>
+                {poem.title}
               </a>
+              <span class="poem-item-meta">
+                NO. {String(index + 1).padStart(3, '0')} // {formatDate(poem.sourceModified)}
+              </span>
             </li>
           ))}
         </ol>
       )}
-    </section>
-  </main>
+    </main>
+  </div>
+
+  <SiteFooter poems={poems} className="home-footer" />
 </BaseLayout>

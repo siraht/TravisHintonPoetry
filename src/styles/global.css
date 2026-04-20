@@ -1,15 +1,17 @@
 :root {
-  --bg: #090909;
-  --surface: rgba(248, 244, 236, 0.06);
-  --surface-strong: rgba(248, 244, 236, 0.1);
-  --text: #f6f1e8;
-  --muted: rgba(246, 241, 232, 0.66);
-  --line: rgba(246, 241, 232, 0.14);
-  --accent: #d6c5a2;
+  --bg: #000000;
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-strong: rgba(255, 255, 255, 0.1);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.6);
+  --line: rgba(255, 255, 255, 0.14);
+  --accent: #ffffff;
   --shadow: rgba(0, 0, 0, 0.35);
   --max-width: 1280px;
   --font-display: 'Cormorant Garamond', serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-mono: 'Space Mono', monospace;
+  --transition-slow: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html {
@@ -19,7 +21,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: #000;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
@@ -66,28 +68,160 @@ code {
   top: 1rem;
 }
 
+.skip-link:focus-visible,
+a:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 4px;
+}
+
 .ambient-noise {
   position: fixed;
   inset: 0;
-  pointer-events: none;
   z-index: 1;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch' /%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23noise)' /%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-.constellation {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
+.brand {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 0.9;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.brand span {
+  display: block;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.brand:hover span:nth-child(1) {
+  transform: translateX(5px);
+}
+
+.brand:hover span:nth-child(2) {
+  transform: translateX(10px);
+}
+
+.brand:hover span:nth-child(3) {
+  transform: translateX(15px);
+}
+
+.page-wrapper {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4vw;
+  min-height: 100vh;
+  padding: 4vw;
+}
+
+.home-page {
+  max-width: none;
+  width: auto;
+  margin: 0;
+}
+
+.home-sidebar {
+  position: sticky;
+  top: 4vw;
+  align-self: start;
+  height: fit-content;
+}
+
+.home-sidebar-note {
+  max-width: 20rem;
+  margin: 1.5rem 0 0;
+  color: rgba(255, 255, 255, 0.42);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+  padding-bottom: 20vh;
+}
+
+.poem-index-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4vh;
+  margin: 0;
+  padding: 0;
+}
+
+.poem-item {
+  position: relative;
+}
+
+.poem-link {
+  position: relative;
+  display: inline-block;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-style: italic;
+  line-height: 1;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.poem-link::before {
+  content: '>';
+  position: absolute;
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-style: normal;
+  transition: opacity var(--transition-fast), left var(--transition-fast);
+}
+
+.poem-link:hover,
+.poem-link:focus-visible {
+  opacity: 1;
+}
+
+.poem-link:hover::before,
+.poem-link:focus-visible::before {
+  opacity: 1;
+  left: -20px;
+}
+
+.poem-item-meta,
+.eyebrow,
+.poem-date,
+.source-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.poem-item-meta {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
   opacity: 0.4;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2) 0 1px, transparent 1px),
-    radial-gradient(circle at 78% 34%, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px),
-    radial-gradient(circle at 52% 75%, rgba(255, 255, 255, 0.16) 0 1px, transparent 1px),
-    linear-gradient(rgba(246, 241, 232, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(246, 241, 232, 0.04) 1px, transparent 1px);
-  background-size: auto, auto, auto, 48px 48px, 48px 48px;
 }
 
 .site-header {
@@ -100,16 +234,6 @@ code {
   width: min(calc(100% - 3rem), var(--max-width));
   margin: 0 auto;
   padding: 2rem 0 0;
-}
-
-.brand {
-  display: grid;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  line-height: 0.86;
-  font-size: clamp(2.3rem, 5vw, 4.8rem);
-  font-weight: 500;
 }
 
 .site-nav {
@@ -125,7 +249,8 @@ code {
 
 .site-nav a,
 .poem-pagination a,
-.not-found a {
+.not-found a,
+.site-footer a {
   padding-bottom: 0.2rem;
   border-bottom: 1px solid transparent;
   text-decoration: none;
@@ -137,45 +262,60 @@ code {
 .poem-pagination a:hover,
 .poem-pagination a:focus-visible,
 .not-found a:hover,
-.not-found a:focus-visible {
+.not-found a:focus-visible,
+.site-footer a:hover,
+.site-footer a:focus-visible {
   border-color: currentColor;
 }
 
-.home-grid,
+.site-footer {
+  position: fixed;
+  bottom: 4vw;
+  left: 4vw;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text);
+  line-height: 1.2;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
 .poem-page,
 .not-found {
   position: relative;
   z-index: 2;
   width: min(calc(100% - 3rem), var(--max-width));
   margin: 0 auto;
-  padding: 3rem 0 5rem;
+  padding: 3rem 0 8rem;
 }
 
-.home-grid {
-  display: grid;
-  grid-template-columns: 1.35fr 0.9fr;
-  gap: 1.5rem;
-}
-
-.hero-panel,
-.manifest-panel,
-.archive-panel,
 .poem-meta,
 .poem-body,
 .poem-pagination,
 .empty-state {
   backdrop-filter: blur(14px);
-  background: linear-gradient(180deg, var(--surface), rgba(248, 244, 236, 0.03));
+  background: linear-gradient(180deg, var(--surface), rgba(255, 255, 255, 0.03));
   border: 1px solid var(--line);
   box-shadow: 0 20px 60px var(--shadow);
 }
 
-.hero-panel {
-  min-height: 27rem;
-  padding: clamp(2rem, 4vw, 4rem);
+.empty-state {
+  padding: 2.5rem;
 }
 
-.hero-panel h1,
+.home-empty-state {
+  max-width: 38rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
 .poem-meta h1,
 .not-found h1 {
   margin: 0;
@@ -186,22 +326,6 @@ code {
   text-wrap: balance;
 }
 
-.eyebrow,
-.manifest-kicker,
-.metric-label,
-.poem-date,
-.poem-index,
-.source-note {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--muted);
-}
-
-.hero-copy,
-.manifest-text,
-.manifest-note,
 .poem-meta p,
 .not-found p,
 .empty-state p {
@@ -209,80 +333,6 @@ code {
   font-size: clamp(1.1rem, 1.5vw, 1.35rem);
   line-height: 1.65;
   color: var(--muted);
-}
-
-.hero-metrics {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 2.5rem;
-}
-
-.hero-metrics > div {
-  display: grid;
-  gap: 0.3rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
-}
-
-.metric-value {
-  font-size: clamp(1.3rem, 2vw, 2.1rem);
-}
-
-.manifest-panel {
-  display: grid;
-  align-content: start;
-  gap: 1.25rem;
-  padding: 2rem;
-}
-
-.archive-panel {
-  grid-column: 1 / -1;
-  padding: 2rem;
-}
-
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: end;
-  margin-bottom: 2rem;
-}
-
-.section-heading h2 {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 400;
-}
-
-.poem-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid var(--line);
-}
-
-.poem-row {
-  border-bottom: 1px solid var(--line);
-}
-
-.poem-link {
-  display: grid;
-  grid-template-columns: 4rem 1fr auto;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 0;
-  text-decoration: none;
-}
-
-.poem-title {
-  font-size: clamp(1.5rem, 3vw, 2.6rem);
-  font-style: italic;
-}
-
-.poem-link:hover .poem-title,
-.poem-link:focus-visible .poem-title {
-  color: var(--accent);
 }
 
 .poem-page {
@@ -293,9 +343,9 @@ code {
 
 .poem-meta {
   align-self: start;
-  padding: 2rem;
   position: sticky;
   top: 1.5rem;
+  padding: 2rem;
 }
 
 .poem-meta h1 {
@@ -329,18 +379,12 @@ code {
   text-align: right;
 }
 
-.empty-state,
-.not-found {
-  padding: 2.5rem;
-}
-
 .not-found {
   max-width: 44rem;
   margin-top: 5rem;
 }
 
 @media (max-width: 900px) {
-  .home-grid,
   .poem-page {
     grid-template-columns: 1fr;
   }
@@ -348,13 +392,22 @@ code {
   .poem-meta {
     position: static;
   }
+}
 
-  .poem-link {
-    grid-template-columns: 3.5rem 1fr;
+@media (max-width: 768px) {
+  .page-wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 2.5rem;
   }
 
-  .poem-date {
-    grid-column: 2;
+  .home-sidebar {
+    position: static;
+  }
+
+  .home-main {
+    padding-top: 0;
+    padding-bottom: 8rem;
   }
 }
 
@@ -363,19 +416,14 @@ code {
     flex-direction: column;
   }
 
-  .home-grid,
   .poem-page,
   .not-found {
     width: min(calc(100% - 1.5rem), var(--max-width));
   }
 
-  .poem-link {
-    grid-template-columns: 1fr;
-    gap: 0.4rem;
-  }
-
-  .poem-index {
-    order: -1;
+  .site-footer {
+    position: static;
+    padding: 0 0 1.5rem 4vw;
   }
 
   .poem-pagination {
