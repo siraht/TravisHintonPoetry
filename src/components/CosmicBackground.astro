@@ -1,0 +1,95 @@
+<canvas id="cosmic-canvas" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.getElementById('cosmic-canvas');
+
+  if (canvas instanceof HTMLCanvasElement) {
+    const ctx = canvas.getContext('2d', { alpha: false });
+
+    if (ctx) {
+      let width = 0;
+      let height = 0;
+      let particles = [];
+      let frameId = 0;
+
+      const config = {
+        particleCount: 1500,
+        pixelSize: 2,
+        rotationSpeed: 0.0002,
+        expansion: 1.5,
+        arms: 3,
+        armWidth: 0.4,
+      };
+
+      class Particle {
+        constructor() {
+          const r = Math.random();
+          const distance = Math.pow(r, config.expansion) * (Math.max(width, height) * 0.8);
+          const armAngle = (Math.floor(Math.random() * config.arms) / config.arms) * Math.PI * 2;
+          const twist = distance * 0.002;
+          const dispersion = (Math.random() - 0.5) * config.armWidth * distance;
+
+          this.baseAngle = armAngle + twist;
+          this.distance = distance + dispersion;
+          this.size = Math.floor(Math.random() * 2) === 0 ? config.pixelSize : config.pixelSize * 2;
+          this.baseAlpha = (1 - this.distance / (Math.max(width, height) * 0.6)) * 0.8;
+          this.baseAlpha = this.baseAlpha < 0 ? 0.1 : this.baseAlpha;
+          this.blinkRate = Math.random() * 0.02;
+          this.blinkPhase = Math.random() * Math.PI * 2;
+        }
+
+        draw(time) {
+          const speedMod = 1 / (1 + this.distance * 0.001);
+          const currentAngle = this.baseAngle + time * config.rotationSpeed * speedMod;
+          const x = width / 2 + Math.cos(currentAngle) * this.distance;
+          const y = height / 2 + Math.sin(currentAngle) * this.distance;
+
+          if (x > 0 && x < width && y > 0 && y < height) {
+            const currentAlpha =
+              this.baseAlpha * (0.7 + 0.3 * Math.sin(time * this.blinkRate + this.blinkPhase));
+
+            const pixelX = Math.floor(x / this.size) * this.size;
+            const pixelY = Math.floor(y / this.size) * this.size;
+
+            ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha})`;
+            ctx.fillRect(pixelX, pixelY, this.size, this.size);
+          }
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        for (let i = 0; i < config.particleCount; i += 1) {
+          particles.push(new Particle());
+        }
+      }
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        initParticles();
+      }
+
+      function animate(time) {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height);
+
+        for (const particle of particles) {
+          particle.draw(time);
+        }
+
+        frameId = window.requestAnimationFrame(animate);
+      }
+
+      resize();
+      frameId = window.requestAnimationFrame(animate);
+      window.addEventListener('resize', resize);
+
+      window.addEventListener('pagehide', () => {
+        if (frameId) {
+          window.cancelAnimationFrame(frameId);
+        }
+      });
+    }
+  }
+</script>
