@@ -1,0 +1,86 @@
+---
+import poems from '../data/poems.generated.json';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate } from '../lib/poetry.js';
+
+const poemCount = poems.length;
+const latestPoem = poems[0];
+---
+
+<BaseLayout>
+  <div class="ambient-noise" aria-hidden="true"></div>
+  <div class="constellation" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span>Travis</span>
+      <span>Hinton</span>
+      <span>Poetry</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#archive">Archive</a>
+      {latestPoem && <a href={`/poems/${latestPoem.slug}/`}>Latest poem</a>}
+    </nav>
+  </header>
+
+  <main id="main" class="home-grid">
+    <section class="hero-panel">
+      <p class="eyebrow">Collected from the vault</p>
+      <h1>A quiet, deliberate archive of poems pulled from an Obsidian practice.</h1>
+      <p class="hero-copy">
+        This site publishes only notes explicitly marked for the poetry collection. The writing
+        stays in the vault. The published archive is generated from that source of truth.
+      </p>
+
+      <div class="hero-metrics" aria-label="Archive metrics">
+        <div>
+          <span class="metric-value">{poemCount}</span>
+          <span class="metric-label">published poems</span>
+        </div>
+        <div>
+          <span class="metric-value">{latestPoem ? formatDate(latestPoem.sourceModified) : '—'}</span>
+          <span class="metric-label">latest update</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifest-panel">
+      <p class="manifest-kicker">Publishing rule</p>
+      <p class="manifest-text">
+        A poem appears here only when its Obsidian frontmatter includes both
+        <code>[[My Poetry]]</code> and <code>PoetrySite</code>.
+      </p>
+      <p class="manifest-note">
+        The source vault is never modified by this project. Local sync creates symlinks for traceability,
+        then generates deployable site data for Netlify.
+      </p>
+    </section>
+
+    <section class="archive-panel" id="archive">
+      <div class="section-heading">
+        <p class="eyebrow">Archive</p>
+        <h2>Published poems</h2>
+      </div>
+
+      {poemCount === 0 ? (
+        <div class="empty-state">
+          <p>No poems are published yet.</p>
+          <p>Add the required frontmatter in Obsidian, then run the sync script.</p>
+        </div>
+      ) : (
+        <ol class="poem-list">
+          {poems.map((poem, index) => (
+            <li class="poem-row">
+              <a class="poem-link" href={`/poems/${poem.slug}/`}>
+                <span class="poem-index">{String(index + 1).padStart(2, '0')}</span>
+                <span class="poem-title">{poem.title}</span>
+                <span class="poem-date">{formatDate(poem.sourceModified)}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  </main>
+</BaseLayout>

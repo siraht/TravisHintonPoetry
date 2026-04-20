@@ -1,0 +1,55 @@
+---
+import poems from '../../data/poems.generated.json';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, renderPoemHtml } from '../../lib/poetry.js';
+
+export function getStaticPaths() {
+  return poems.map((poem, index) => ({
+    params: { slug: poem.slug },
+    props: {
+      poem,
+      previous: poems[index + 1] ?? null,
+      next: poems[index - 1] ?? null,
+    },
+  }));
+}
+
+const { poem, previous, next } = Astro.props;
+const poemHtml = renderPoemHtml(poem.body);
+---
+
+<BaseLayout title={`${poem.title} | Travis Hinton Poetry`} description={poem.excerpt}>
+  <div class="ambient-noise" aria-hidden="true"></div>
+
+  <header class="site-header poem-header">
+    <a class="brand" href="/">
+      <span>Travis</span>
+      <span>Hinton</span>
+      <span>Poetry</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Poem navigation">
+      <a href="/">Archive</a>
+    </nav>
+  </header>
+
+  <main id="main" class="poem-page">
+    <section class="poem-meta">
+      <p class="eyebrow">Poem</p>
+      <h1>{poem.title}</h1>
+      <p>{formatDate(poem.sourceModified)}</p>
+      <p class="source-note">{poem.relativeSourcePath}</p>
+    </section>
+
+    <article class="poem-body" set:html={poemHtml}></article>
+
+    <nav class="poem-pagination" aria-label="More poems">
+      <div>
+        {previous ? <a href={`/poems/${previous.slug}/`}>Older: {previous.title}</a> : <span></span>}
+      </div>
+      <div>
+        {next ? <a href={`/poems/${next.slug}/`}>Newer: {next.title}</a> : <span></span>}
+      </div>
+    </nav>
+  </main>
+</BaseLayout>
