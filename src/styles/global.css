@@ -217,6 +217,10 @@ a:focus-visible {
   color: var(--muted);
 }
 
+.poem-page .eyebrow {
+  display: none;
+}
+
 .poem-item-meta {
   display: block;
   margin-top: 0.5rem;
