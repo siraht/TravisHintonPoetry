@@ -23,13 +23,13 @@ const poemCount = poems.length;
         </div>
       ) : (
         <ol class="poem-index-list" aria-label="Published poems">
-          {poems.map((poem, index) => (
+          {poems.map((poem) => (
             <li class="poem-item">
               <a class="poem-link" href={`/poems/${poem.slug}/`}>
                 {poem.title}
               </a>
               <span class="poem-item-meta">
-                NO. {String(index + 1).padStart(3, '0')} // {formatDate(poem.sourceCreated)}
+                {formatDate(poem.sourceCreated)}
               </span>
             </li>
           ))}
