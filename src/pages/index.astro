@@ -4,8 +4,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { formatDate } from '../lib/poetry.js';
 import SiteBrand from '../components/SiteBrand.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-
-const poemCount = poems.length;
 ---
 
 <BaseLayout>
@@ -13,9 +11,6 @@ const poemCount = poems.length;
   <div class="page-wrapper home-page">
     <header class="home-sidebar">
       <SiteBrand />
-      <p class="home-sidebar-note">
-        {poemCount} published poems, synced from explicitly tagged Obsidian notes.
-      </p>
     </header>
 
     <main id="main" class="home-main">
