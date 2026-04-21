@@ -11,6 +11,7 @@
       this.height = 0;
       this.particles = [];
       this.frameId = 0;
+      this.resizeObserver = null;
       this.config = {
         particleCount: 1500,
         pixelSize: 2,
@@ -27,7 +28,8 @@
       if (this.canvas === canvas) return;
       this.canvas = canvas;
       this.ctx = canvas.getContext('2d', { alpha: false });
-      this.resize();
+      this.observeCanvas();
+      this.handleResize();
     }
 
     Particle = class {
@@ -75,10 +77,34 @@
       }
     }
 
-    resize() {
-      this.width = this.canvas.width = window.innerWidth;
-      this.height = this.canvas.height = window.innerHeight;
+    handleResize() {
+      if (!(this.canvas instanceof HTMLCanvasElement) || !this.ctx) return;
+
+      const rect = this.canvas.getBoundingClientRect();
+      const nextWidth = Math.max(1, Math.round(rect.width));
+      const nextHeight = Math.max(1, Math.round(rect.height));
+
+      if (nextWidth === this.width && nextHeight === this.height) return;
+
+      this.width = nextWidth;
+      this.height = nextHeight;
+      this.canvas.width = nextWidth;
+      this.canvas.height = nextHeight;
       this.initParticles();
+    }
+
+    observeCanvas() {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
+
+      if ('ResizeObserver' in window) {
+        this.resizeObserver = new ResizeObserver(() => this.handleResize());
+        this.resizeObserver.observe(this.canvas);
+      }
+
+      window.removeEventListener('resize', this.handleResize);
+      window.addEventListener('resize', this.handleResize, { passive: true });
     }
 
     animate(time) {
@@ -94,8 +120,8 @@
 
     start() {
       if (this.frameId) return;
-      this.resize();
-      window.addEventListener('resize', this.resize);
+      this.observeCanvas();
+      this.handleResize();
       this.frameId = window.requestAnimationFrame(this.animate);
     }
   }
