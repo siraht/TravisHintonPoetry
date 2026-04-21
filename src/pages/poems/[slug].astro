@@ -23,19 +23,21 @@ const poemHtml = renderPoemHtml(poem.body);
 <BaseLayout title={`${poem.title} | Travis Hinton Poetry`} description={poem.excerpt}>
   <div class="ambient-noise" aria-hidden="true"></div>
 
-  <header class="site-header poem-header">
-    <SiteBrand />
-  </header>
+  <div class="detail-page-wrapper">
+    <header class="site-header poem-header">
+      <SiteBrand />
+    </header>
 
-  <main id="main" class="poem-page">
-    <section class="poem-meta">
-      <p class="eyebrow">Poem</p>
-      <h1>{poem.title}</h1>
-      <p>{formatDate(poem.sourceCreated)}</p>
-    </section>
+    <main id="main" class="poem-page">
+      <section class="poem-meta">
+        <p class="eyebrow">Poem</p>
+        <h1>{poem.title}</h1>
+        <p>{formatDate(poem.sourceCreated)}</p>
+      </section>
 
-    <article class="poem-body" set:html={poemHtml}></article>
-  </main>
+      <article class="poem-body" set:html={poemHtml}></article>
+    </main>
 
-  <SiteFooter previous={previous} next={next} />
+    <SiteFooter previous={previous} next={next} className="detail-footer" />
+  </div>
 </BaseLayout>
