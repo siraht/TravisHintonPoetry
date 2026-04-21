@@ -42,13 +42,20 @@ code {
   overflow: clip;
 }
 
-#cosmic-canvas {
+.cosmic-background-shell {
   position: fixed;
   top: 0px;
   right: 0px;
   width: 50vw;
   height: 50vh;
   z-index: 0;
+  pointer-events: none;
+}
+
+#cosmic-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
   opacity: 0.6;
   pointer-events: none;
   image-rendering: pixelated;
