@@ -60,6 +60,24 @@ function resolveCreatedAt(stats) {
   return stats.mtime;
 }
 
+function resolveFrontmatterCreatedOn(value) {
+  if (!value) return null;
+
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value;
+  }
+
+  const normalized = String(value).trim();
+  if (!normalized) return null;
+
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+}
+
 async function main() {
   const files = await fg('**/*.md', {
     cwd: vaultRoot,
@@ -86,7 +104,9 @@ async function main() {
     if (!include) continue;
 
     const stats = await fs.stat(file);
-    const createdAt = resolveCreatedAt(stats);
+    const createdAt =
+      resolveFrontmatterCreatedOn(parsed.data.createdon) ??
+      resolveCreatedAt(stats);
     const relativeSourcePath = path.relative(vaultRoot, file);
     const title = titleFromFile(file, parsed.data);
     const baseSlug = slugify(title) || slugify(relativeSourcePath) || `poem-${makeHash(relativeSourcePath)}`;
