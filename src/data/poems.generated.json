@@ -330,16 +330,6 @@
     "sourceCreated": "2025-03-25T04:55:28.664Z"
   },
   {
-    "slug": "last-night-at-bonnies",
-    "title": "Last night at Bonnies",
-    "excerpt": "Love and disappointment tango bittersweet Questioning what is,  And what had to be Answers elude while guilt holds court",
-    "body": "Love and disappointment tango bittersweet\nQuestioning what is, \nAnd what had to be\nAnswers elude while guilt holds court\n\nLife, this moment, in double exposure\nThe photo refuses to stand still\nI hesitate to lead it\n\nEscape eclipsed by hope, \nI'm still here.",
-    "relativeSourcePath": "Creative/Poetry/Last night at Bonnies.md",
-    "symlinkPath": ".poetry-source/last-night-at-bonnies.md",
-    "sourceModified": "2026-04-20T21:49:04.150Z",
-    "sourceCreated": "2025-03-25T04:55:28.051Z"
-  },
-  {
     "slug": "another-way",
     "title": "Another way",
     "excerpt": "Eat me for dinner My souls gone to mourn The way that you looked Some way my soul shook Isn't there another way? Can't there be some way to say? I don't want you I love you, but I don't want you Not now, But not for fore",
@@ -358,6 +348,16 @@
     "symlinkPath": ".poetry-source/ever-ripe.md",
     "sourceModified": "2026-04-20T21:47:28.291Z",
     "sourceCreated": "2024-01-04T00:00:00.000Z"
+  },
+  {
+    "slug": "last-night-at-bonnies",
+    "title": "Last night at Bonnies",
+    "excerpt": "Love and disappointment tango bittersweet Questioning what is,  And what had to be Answers elude while guilt holds court",
+    "body": "Love and disappointment tango bittersweet\nQuestioning what is, \nAnd what had to be\nAnswers elude while guilt holds court\n\nLife, this moment, in double exposure\nThe photo refuses to stand still\nI hesitate to lead it\n\nEscape eclipsed by hope, \nI'm still here.",
+    "relativeSourcePath": "Creative/Poetry/Last night at Bonnies.md",
+    "symlinkPath": ".poetry-source/last-night-at-bonnies.md",
+    "sourceModified": "2026-04-21T01:34:52.477Z",
+    "sourceCreated": "2019-11-19T00:00:00.000Z"
   },
   {
     "slug": "can-t-sleep-don-t-tell",
