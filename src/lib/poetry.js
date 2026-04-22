@@ -1,16 +1,21 @@
+import { marked } from 'marked';
+
 const DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
 
-function escapeHtml(value) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#39;');
+marked.use({
+  gfm: true,
+  breaks: true,
+});
+
+function normalizeObsidianMarkdown(value) {
+  return String(value ?? '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')
+    .replace(/\[\[([^\]]+)\]\]/g, '$1');
 }
 
 export function formatDate(value) {
@@ -25,11 +30,9 @@ export function formatDate(value) {
 }
 
 export function bodyToPlainText(body) {
-  return String(body ?? '')
-    .replace(/\r\n/g, '\n')
-    .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')
-    .replace(/\[\[([^\]]+)\]\]/g, '$1')
+  return normalizeObsidianMarkdown(body)
     .replace(/`{1,3}/g, '')
+    .replace(/[*_~]+/g, '')
     .trim();
 }
 
@@ -40,7 +43,7 @@ export function makeExcerpt(body, maxLength = 180) {
 }
 
 export function renderPoemHtml(body) {
-  const normalized = bodyToPlainText(body);
+  const normalized = normalizeObsidianMarkdown(body).trim();
 
   if (!normalized) {
     return '<p class="empty-poem">No poem text yet.</p>';
@@ -55,7 +58,7 @@ export function renderPoemHtml(body) {
     .map((stanza) => {
       const lines = stanza
         .split('\n')
-        .map((line) => escapeHtml(line.trimEnd()))
+        .map((line) => marked.parseInline(line.trimEnd()))
         .join('<br>');
 
       return `<p>${lines}</p>`;
