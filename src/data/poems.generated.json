@@ -320,16 +320,6 @@
     "sourceCreated": "2025-03-25T04:55:28.664Z"
   },
   {
-    "slug": "another-way",
-    "title": "Another way",
-    "excerpt": "Eat me for dinner My souls gone to mourn The way that you looked Some way my soul shook Isn't there another way? Can't there be some way to say? I don't want you I love you, but I don't want you Not now, But not for fore",
-    "body": "Eat me for dinner\nMy souls gone to mourn\nThe way that you looked\nSome way my soul shook\nIsn't there another way?\nCan't there be some way to say?\nI don't want you\nI love you, but I don't want you\nNot now,\nBut not for forever\nIsn't there some other way?`",
-    "relativeSourcePath": "Creative/Poetry/Another way.md",
-    "symlinkPath": ".poetry-source/another-way.md",
-    "sourceModified": "2026-04-20T21:54:53.296Z",
-    "sourceCreated": "2025-03-25T04:55:28.050Z"
-  },
-  {
     "slug": "ever-ripe",
     "title": "Ever-Ripe",
     "excerpt": "How do I let it ripen until it's done? Do I believe I should be like Ever-Ripe, the new, genetically modified produce by Dole? Should I have a wax-based coating, preventing me from ever going bad? Can I be treated with a",
@@ -358,5 +348,15 @@
     "symlinkPath": ".poetry-source/can-t-sleep-don-t-tell.md",
     "sourceModified": "2026-04-21T01:25:29.779Z",
     "sourceCreated": "2017-09-23T00:00:00.000Z"
+  },
+  {
+    "slug": "another-way",
+    "title": "Another way",
+    "excerpt": "Eat me for dinner My souls gone to mourn The way that you looked Some way my soul shook Isn't there another way? Can't there be some way to say? I don't want you I love you, but I don't want you Not now, But not for fore",
+    "body": "Eat me for dinner\nMy souls gone to mourn\nThe way that you looked\nSome way my soul shook\nIsn't there another way?\nCan't there be some way to say?\nI don't want you\nI love you, but I don't want you\nNot now,\nBut not for forever\nIsn't there some other way?`",
+    "relativeSourcePath": "Creative/Poetry/Another way.md",
+    "symlinkPath": ".poetry-source/another-way.md",
+    "sourceModified": "2026-04-23T03:16:16.542Z",
+    "sourceCreated": "2016-05-18T00:00:00.000Z"
   }
 ]
