@@ -156,6 +156,42 @@ a:focus-visible {
   text-transform: uppercase;
 }
 
+.tag-filter-list,
+.poem-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.tag-filter,
+.poem-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0.28rem 0.58rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.68);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+}
+
+.tag-filter:hover,
+.tag-filter:focus-visible,
+.tag-filter[aria-current='page'],
+.poem-tag:hover,
+.poem-tag:focus-visible {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
 .home-main {
   display: flex;
   flex-direction: column;
@@ -176,6 +212,11 @@ a:focus-visible {
 
 .poem-item {
   position: relative;
+}
+
+.poem-item.is-favorite .poem-link {
+  opacity: 0.95;
+  font-weight: 500;
 }
 
 .poem-link {
@@ -389,6 +430,10 @@ a:focus-visible {
   margin-bottom: 1rem;
 }
 
+.poem-meta .poem-tag-list {
+  margin: 0 0 1rem;
+}
+
 .poem-body {
   padding: clamp(2rem, 5vw, 4rem);
   font-size: clamp(1.15rem, 1.8vw, 1.55rem);
@@ -403,6 +448,15 @@ a:focus-visible {
 .not-found {
   max-width: 44rem;
   margin-top: 5rem;
+}
+
+.tag-archive-label {
+  margin: 0 0 2rem;
+  color: rgba(255, 255, 255, 0.48);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 900px) {
