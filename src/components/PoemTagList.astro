@@ -1,0 +1,13 @@
+---
+const { tags = [] } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <nav class="poem-tag-list" aria-label="Poem tags">
+    {tags.map((tag) => (
+      <a class="poem-tag" href={`/tags/${tag.slug}/`}>
+        {tag.label}
+      </a>
+    ))}
+  </nav>
+)}

@@ -1,0 +1,20 @@
+---
+const { tags = [], activeSlug = '' } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <nav class="tag-filter-list" aria-label="Poem filters">
+    <a class="tag-filter" href="/" aria-current={activeSlug === '' ? 'page' : undefined}>
+      All
+    </a>
+    {tags.map((tag) => (
+      <a
+        class="tag-filter"
+        href={`/tags/${tag.slug}/`}
+        aria-current={activeSlug === tag.slug ? 'page' : undefined}
+      >
+        {tag.label}
+      </a>
+    ))}
+  </nav>
+)}
