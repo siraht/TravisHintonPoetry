@@ -2,14 +2,13 @@
 import poems from '../data/poems.generated.json';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { formatDate } from '../lib/poetry.js';
-import { getAllTags, sortPoemsForListing } from '../lib/tags.js';
+import { getAllTags } from '../lib/tags.js';
 import SiteBrand from '../components/SiteBrand.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import TagFilters from '../components/TagFilters.astro';
 
 const poemCount = poems.length;
 const tags = getAllTags(poems);
-const indexPoems = sortPoemsForListing(poems);
 ---
 
 <BaseLayout>
@@ -28,7 +27,7 @@ const indexPoems = sortPoemsForListing(poems);
         </div>
       ) : (
         <ol class="poem-index-list" aria-label="Published poems">
-          {indexPoems.map((poem) => (
+          {poems.map((poem) => (
             <li class:list={['poem-item', { 'is-favorite': poem.favorite }]}>
               <a class="poem-link" href={`/poems/${poem.slug}/`}>
                 {poem.title}
