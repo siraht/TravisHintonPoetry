@@ -23,6 +23,49 @@ function hasMarker(values, marker) {
     .some((value) => value === marker);
 }
 
+function normalizePublicTag(value) {
+  const label = String(value ?? '')
+    .replace(/^#/, '')
+    .replace(/^\[\[|\]\]$/g, '')
+    .trim();
+
+  if (!label) return null;
+
+  const slug = slugify(label);
+  if (!slug) return null;
+
+  return { label, slug };
+}
+
+function parsePublicTags(frontmatterData) {
+  const seen = new Set();
+  const tags = [];
+
+  for (const value of toArray(frontmatterData.siteTags)) {
+    const tag = normalizePublicTag(value);
+    if (!tag || seen.has(tag.slug)) continue;
+
+    seen.add(tag.slug);
+    tags.push(tag);
+  }
+
+  return tags;
+}
+
+function parseBoolean(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  if (typeof value !== 'string') return false;
+
+  return ['true', 'yes', '1', 'favorite', 'featured'].includes(value.trim().toLowerCase());
+}
+
+function isFavorite(frontmatterData, publicTags) {
+  if (parseBoolean(frontmatterData.favorite)) return true;
+
+  return publicTags.some((tag) => tag.slug === 'favorite' || tag.slug === 'favorites');
+}
+
 function slugify(value) {
   return value
     .normalize('NFKD')
@@ -112,6 +155,8 @@ async function main() {
     const baseSlug = slugify(title) || slugify(relativeSourcePath) || `poem-${makeHash(relativeSourcePath)}`;
     const slug = usedSlugs.has(baseSlug) ? `${baseSlug}-${makeHash(relativeSourcePath)}` : baseSlug;
     usedSlugs.add(slug);
+    const publicTags = parsePublicTags(parsed.data);
+    const favorite = isFavorite(parsed.data, publicTags);
 
     const linkName = `${slug}.md`;
     const linkPath = path.join(symlinkRoot, linkName);
@@ -125,6 +170,8 @@ async function main() {
       title,
       excerpt: excerptSource.replace(/\n+/g, ' ').trim().slice(0, 220),
       body: cleanBody,
+      publicTags,
+      favorite,
       relativeSourcePath,
       symlinkPath: path.relative(projectRoot, linkPath),
       sourceModified: stats.mtime.toISOString(),
