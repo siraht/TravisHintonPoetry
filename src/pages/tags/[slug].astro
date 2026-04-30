@@ -1,0 +1,56 @@
+---
+import poems from '../../data/poems.generated.json';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/poetry.js';
+import { getAllTags, poemMatchesTag, sortPoemsForListing } from '../../lib/tags.js';
+import SiteBrand from '../../components/SiteBrand.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import TagFilters from '../../components/TagFilters.astro';
+
+const tags = getAllTags(poems);
+
+export function getStaticPaths() {
+  return tags.map((tag) => {
+    const taggedPoems = sortPoemsForListing(poems.filter((poem) => poemMatchesTag(poem, tag.slug)));
+
+    return {
+      params: { slug: tag.slug },
+      props: {
+        tag,
+        taggedPoems,
+      },
+    };
+  });
+}
+
+const { tag, taggedPoems } = Astro.props;
+---
+
+<BaseLayout title={`${tag.label} | Written By Travis`}>
+  <div class="ambient-noise" aria-hidden="true"></div>
+  <div class="page-wrapper home-page tag-page">
+    <header class="home-sidebar">
+      <SiteBrand />
+      <TagFilters tags={tags} activeSlug={tag.slug} />
+    </header>
+
+    <main id="main" class="home-main">
+      <p class="tag-archive-label">{tag.label}</p>
+      <ol class="poem-index-list" aria-label={`${tag.label} poems`}>
+        {taggedPoems.map((poem) => (
+          <li class:list={['poem-item', { 'is-favorite': poem.favorite }]}>
+            <a class="poem-link" href={`/poems/${poem.slug}/`}>
+              {poem.title}
+            </a>
+            <span class="poem-item-meta">
+              {poem.favorite && <span>Favorite // </span>}
+              {formatDate(poem.sourceCreated)}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </main>
+  </div>
+
+  <SiteFooter className="home-footer" />
+</BaseLayout>
