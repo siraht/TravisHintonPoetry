@@ -7,10 +7,10 @@ import SiteBrand from '../../components/SiteBrand.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import TagFilters from '../../components/TagFilters.astro';
 
-const tags = getAllTags(poems);
-
 export function getStaticPaths() {
-  return tags.map((tag) => {
+  const staticTags = getAllTags(poems);
+
+  return staticTags.map((tag) => {
     const taggedPoems = sortPoemsForListing(poems.filter((poem) => poemMatchesTag(poem, tag.slug)));
 
     return {
@@ -24,6 +24,7 @@ export function getStaticPaths() {
 }
 
 const { tag, taggedPoems } = Astro.props;
+const tags = getAllTags(poems);
 ---
 
 <BaseLayout title={`${tag.label} | Written By Travis`}>
