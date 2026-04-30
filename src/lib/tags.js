@@ -1,5 +1,5 @@
 export const FAVORITES_TAG = {
-  label: 'Favorites',
+  label: "T's Favs",
   slug: 'favorites',
 };
 
