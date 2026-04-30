@@ -2,8 +2,10 @@
 import poems from '../../data/poems.generated.json';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { formatDate, renderPoemHtml } from '../../lib/poetry.js';
+import { getPoemTags } from '../../lib/tags.js';
 import SiteBrand from '../../components/SiteBrand.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import PoemTagList from '../../components/PoemTagList.astro';
 
 export function getStaticPaths() {
   return poems.map((poem, index) => ({
@@ -18,9 +20,10 @@ export function getStaticPaths() {
 
 const { poem, previous, next } = Astro.props;
 const poemHtml = renderPoemHtml(poem.body);
+const poemTags = getPoemTags(poem);
 ---
 
-<BaseLayout title={`${poem.title} | Travis Hinton Poetry`} description={poem.excerpt}>
+<BaseLayout title={`${poem.title} | Written By Travis`} description={poem.excerpt}>
   <div class="ambient-noise" aria-hidden="true"></div>
 
   <div class="detail-page-wrapper">
@@ -32,6 +35,7 @@ const poemHtml = renderPoemHtml(poem.body);
       <section class="poem-meta">
         <p class="eyebrow">Poem</p>
         <h1>{poem.title}</h1>
+        <PoemTagList tags={poemTags} />
         <p>{formatDate(poem.sourceCreated)}</p>
       </section>
 
