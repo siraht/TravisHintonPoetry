@@ -36,3 +36,10 @@ siteTags:
 - `npm run build`: create the static site
 - `npm run sync:publish`: sync, commit, and push changes
 - `npm run cron:install`: install a local 30-minute cron entry
+
+## Hosting
+
+Cloudflare Pages builds the `main` branch with `npm run build` and publishes
+`dist/`. The Pages project configuration is recorded in `wrangler.jsonc`.
+`npm run sync:publish` commits and pushes content; the Git-connected Pages
+project deploys that push.
