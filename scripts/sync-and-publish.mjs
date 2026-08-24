@@ -1,10 +1,8 @@
 import { spawnSync } from 'node:child_process';
-import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
 const projectRoot = path.resolve(new URL('..', import.meta.url).pathname);
-const netlifyStatePath = path.join(projectRoot, '.netlify', 'state.json');
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -20,12 +18,6 @@ function run(command, args, options = {}) {
 
 run(process.execPath, [path.join(projectRoot, 'scripts/sync-poems.mjs')]);
 run('npm', ['run', 'build']);
-
-if (fs.existsSync(netlifyStatePath)) {
-  run('npx', ['netlify', 'deploy', '--prod', '--dir', 'dist', '--message', 'Poetry sync']);
-} else {
-  console.log('Netlify is not linked yet. Skipping deploy.');
-}
 
 const status = spawnSync('git', ['status', '--porcelain'], {
   cwd: projectRoot,
@@ -45,3 +37,4 @@ if (!status.stdout.trim()) {
 run('git', ['add', '.']);
 run('git', ['commit', '-m', 'chore: sync poetry site content']);
 run('git', ['push']);
+console.log('Content pushed. Cloudflare Pages will deploy the updated production branch.');
